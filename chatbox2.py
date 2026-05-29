@@ -1,13 +1,21 @@
 import os  # 导入os模块,用于获取环境变量
-from dotenv import load_dotenv  # 导入load_dotenv函数,用于加载环境变量文件
 from openai import OpenAI  # 专门用来连接OpenAI LLM的库
 import streamlit as st # 专门用来创建Web应用的库
 
-load_dotenv()  # 从.env文件读取环境变量
+# 优先从 Streamlit Secrets 读取环境变量（用于部署）
+if hasattr(st, "secrets") and "API_KEY" in st.secrets:
+    api_key = st.secrets["API_KEY"]
+    base_url = st.secrets["BASE_URL"]
+else:
+    # 本地开发时从 .env 读取
+    from dotenv import load_dotenv
+    load_dotenv()
+    api_key = os.getenv("API_KEY")
+    base_url = os.getenv("BASE_URL")
 
 client = OpenAI(
-    api_key=os.getenv("API_KEY"),
-    base_url=os.getenv("BASE_URL")
+    api_key=api_key,
+    base_url=base_url
 )
 
 # ==============写页面=====================
@@ -34,7 +42,7 @@ if prompt := st.chat_input("请输入你的问题"):   #:= 可以赋值,将用�
 
     # 在页面上展示这句话
     with st.chat_message("user"):
-      st.write({prompt})
+      st.write(prompt)
         
       # 创建一个AI响应的容器
       with st.chat_message("assistant"):
