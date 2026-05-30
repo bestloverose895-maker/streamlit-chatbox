@@ -1,4 +1,5 @@
 import os  # 导入os模块,用于获取环境变量
+from datetime import datetime
 from openai import OpenAI  # 专门用来连接OpenAI LLM的库
 import streamlit as st # 专门用来创建Web应用的库
 
@@ -50,7 +51,7 @@ if prompt := st.chat_input("请输入你的问题"):   #:= 可以赋值,将用�
         response = client.chat.completions.create(
             model="deepseek-v4-flash",
             messages=[ # 用户消息
-                {"role": "system", "content": "【重要】当前日期是2026年5月30日，今天是星期六。你是一个知识渊博的助手,侧重的领域是金融和政治,精通裸k技术学。如果用户询问今天的日期或当前时间，请告诉他现在是2026年5月30日。如果用户询问的事件发生在你的知识截止日期之后，请诚实地告诉用户你不确定。"},
+                {"role": "system", "content": f"【重要】当前日期是{datetime.now().strftime('%Y年%m月%d日')}，今天是{['星期一','星期二','星期三','星期四','星期五','星期六','星期日'][datetime.now().weekday()]}。你是一个知识渊博的助手,侧重的领域是金融和政治,精通裸k技术学。如果用户询问今天的日期或当前时间，请告诉他现在是{datetime.now().strftime('%Y年%m月%d日')}。如果用户询问的事件发生在你的知识截止日期之后，请诚实地告诉用户你不确定。"},
             *st.session_state.messages,#  *为解包操作符,将列表中的元素展开为多个参数,解构到 messages 数组中
             ],
             stream=True,
