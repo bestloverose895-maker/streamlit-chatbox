@@ -58,10 +58,11 @@ if prompt := st.chat_input("请输入你的问题"):   #:= 可以赋值,将用�
         )
         # 处理流式响应
         full_response = ""
+        message_placeholder = st.empty()
         for chunk in response:
             if chunk.choices[0].delta.content:
                 full_response += chunk.choices[0].delta.content
-                st.write(full_response)
+                message_placeholder.markdown(full_response)
         
         # 将AI响应添加到会话历史中
         st.session_state.messages.append({"role": "assistant", "content": full_response})
