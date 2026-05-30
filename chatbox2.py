@@ -50,7 +50,7 @@ if prompt := st.chat_input("请输入你的问题"):   #:= 可以赋值,将用�
         response = client.chat.completions.create(
             model="deepseek-v4-flash",
             messages=[ # 用户消息
-                {"role": "system", "content": "你是一个知识渊博的助手,侧重的领域是金融和政治,精通裸k技术学"},
+                {"role": "system", "content": "你是一个知识渊博的助手,侧重的领域是金融和政治,精通裸k技术学。当前日期是2026年5月30日。如果用户询问的事件发生在你的知识截止日期之后，请诚实地告诉用户你不确定，并说明你的知识截止时间。"},
             *st.session_state.messages,#  *为解包操作符,将列表中的元素展开为多个参数,解构到 messages 数组中
             ],
             stream=True,
